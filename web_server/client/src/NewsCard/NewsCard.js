@@ -18,14 +18,16 @@ class NewsCard extends React.Component {
             </div>
             <div className="col s1" />
             <div className="col s7">
-              <div className="news-intro-panel">
-                <h4>{this.props.news.title}</h4>
-                <div className="news-description">
-                  <p>{this.props.news.description}</p>
-                  <div>
-                    {this.props.news.source != null && <div className="chip light-blue news-clip">{this.props.news.source}</div>}
-                    {this.props.news.reason != null && <div className="chip light-blue news-clip">{this.props.news.reason}</div>}
-                    {this.props.news.time != null && <div className="chip light-blue news-clip">{this.props.news.time}</div>}
+              <div className="news-intro-col">
+                <div className="news-intro-panel">
+                  <h4>{this.props.news.title}</h4>
+                  <div className="news-description">
+                    <p>{this.props.news.description}</p>
+                    <div>
+                      {this.props.news.source != null && <div className="chip light-blue news-clip">{this.props.news.source}</div>}
+                      {this.props.news.reason != null && <div className="chip light-blue news-clip">{this.props.news.reason}</div>}
+                      {this.props.news.time != null && <div className="chip light-blue news-clip">{this.props.news.time}</div>}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -33,7 +35,7 @@ class NewsCard extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

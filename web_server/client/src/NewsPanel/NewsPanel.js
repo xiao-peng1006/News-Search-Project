@@ -2,6 +2,7 @@ import './NewsPanel.css';
 
 import React from 'react';
 import NewsCard from '../NewsCard/NewsCard';
+import _ from 'lodash';
 
 class NewsPanel extends React.Component {
   constructor() {
@@ -13,25 +14,39 @@ class NewsPanel extends React.Component {
 
   componentDidMount() {
     this.loadMoreNews();
+    // Need to add debounce to any events relate to scroll action
+    this.loadMoreNews = _.debounce(this.loadMoreNews, 1000);
+    window.addEventListener('scroll', () => this.handleScroll());
+  }
+
+  handleScroll() {
+    // Different browser has different variable name
+    let scrollY = window.scrollY || window.pageYOffset || window.documentElement.scrollTop;
+    if ((window.innerHeight + scrollY) >= (document.body.offsetHeight - 50)) {
+      console.log('Loding more news...');
+      this.loadMoreNews();
+    }
   }
 
   loadMoreNews() {
-    this.setState({
-      news:
-        [{
+    console.log('Actually triggered loading more news')
+    const news_url = 'http://' + window.location.hostname + ':3000' + '/news';
+    const request = new Request(news_url, { method: 'GET' });
 
-        },
-        {
-
-        }]
-    });
+    fetch(request)
+      .then(res => res.json())
+      .then(news_list => {
+        this.setState({
+          news: this.state.news ? this.state.news.concat(news_list) : news_list,
+        });
+      })
   }
 
   renderNews() {
     const news_list = this.state.news.map(one_news => {
       return (
         <a className='list-group-item' href='#'>
-          <NewsCard news={this.state.news}/>
+          <NewsCard news={one_news}/>
         </a>
       );
     });
