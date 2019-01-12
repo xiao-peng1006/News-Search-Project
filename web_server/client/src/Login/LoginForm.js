@@ -1,4 +1,5 @@
 import './LoginForm.css';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -42,7 +43,7 @@ const LoginForm = ({onSubmit, onChange, errors}) => (
         <div className="row">
           <p className="right-align">
             New to Tap News?
-            <a href="/signup">Sign Up</a>
+            <Link to="/signup">Sign Up</Link>
           </p>
         </div>
       </form>

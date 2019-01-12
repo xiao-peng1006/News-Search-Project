@@ -1,4 +1,5 @@
 import './SignUpForm.css';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -48,7 +49,7 @@ const SignUpForm = ({onSubmit, onChange, errors}) => (
         <div className="row">
           <p className="right-align">
           Already have an account?
-          <a href="/login">Login</a>
+          <Link to="/login">Login</Link>
           </p>
         </div>
       </form>
