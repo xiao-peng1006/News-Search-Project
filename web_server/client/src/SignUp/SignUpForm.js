@@ -1,22 +1,22 @@
-import './LoginForm.css';
+import './SignUpForm.css';
 
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const LoginForm = ({onSubmit, onChange, errors}) => (
+const SignUpForm = ({onSubmit, onChange, errors}) => (
   <div className="container">
-    <div className="card-panel login-panel">
+    <div className="card-panel signup-panel">
       <form className="col s12" action="/" onSubmit={onSubmit}>
-        <h4 className="center-align">Login</h4>
+        <h4 className="center-align">Sign Up</h4>
         {
           errors.summary && <div className="row">
-              <p className="error-message">{errors.summary}</p>
+              <p className="error-messag  e">{errors.summary}</p>
             </div>
         }
         <div className="row">
           <div className="input-field col s12">
-            <input className="validate" id="email" type="email" name="email" onChange={onChange}/>
-            <label htmlFor='email'>Email</label>
+            <input id="email" type="email" name="email" className="validate" onChange={onChange}/>
+            <label htmlFor="email">Email</label>
           </div>
         </div>
         {
@@ -27,8 +27,8 @@ const LoginForm = ({onSubmit, onChange, errors}) => (
         }
         <div className="row">
           <div className="input-field col s12">
-            <input className="validate" id="password" type="password" name="password" onChange={onChange}/>
-            <label htmlFor='password'>Password</label>
+            <input id="password" type="password" name="password" className="validate" onChange={onChange}/>
+            <label htmlFor="password">Password</label>
           </div>
         </div>
         {
@@ -36,13 +36,19 @@ const LoginForm = ({onSubmit, onChange, errors}) => (
               <p className="error-message">{errors.password}</p>
             </div>
         }
+        <div className="row">
+          <div className="input-field col s12">
+            <input id="confirm_password" type="password" name="confirm_password" className="validate" onChange={onChange}/>
+            <label htmlFor="confirm_password">Confirm Password</label>
+          </div>
+        </div>
         <div className="row right-align">
-          <input type="submit" className="waves-effect waves-light btn indigo lighten-1" value='Log in'/>
+          <input type="submit" className="waves-effect waves-light btn indigo lighten-1" value='Sign Up'/>
         </div>
         <div className="row">
           <p className="right-align">
-            New to Tap News?
-            <a href="/signup">Sign Up</a>
+          Already have an account?
+          <a href="/login">Login</a>
           </p>
         </div>
       </form>
@@ -50,11 +56,9 @@ const LoginForm = ({onSubmit, onChange, errors}) => (
   </div>
 );
 
-// use Proptype to set functions and object to be required
-LoginForm.PropType = {
+SignUpForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
-}
-
-export default LoginForm;
+};
+export default SignUpForm;
