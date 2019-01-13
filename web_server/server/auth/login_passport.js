@@ -1,0 +1,63 @@
+const jwt = require('jsonwebtoken');
+const User = require('mongoose').model('User');
+const PassportLocalStrategy = require('passport-local').Strategy;
+const config = require('../config/config.json');
+
+module.exports = new PassportLocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password',
+  session: false,
+  passReqToCallback: true
+}, (req, email, password, done) => {
+  const userData = {
+    email: email.trim(),
+    password: password
+  };
+
+  // find a user by email address
+  return User.findOne({email: userData.email}, (err, user) => {
+    if (err) {
+      return done(err);
+    }
+
+    // if no match user found, return error
+    if (!user) {
+      const error = new Error('Incorrect email or password');
+      error.name = 'IncorrectCredentialsError';
+
+      return done(error);
+    }
+
+    // check if a hashed user's password is equal to a value saved in the database
+    return user.comparePassword(userData.password, (passwordErr, isMatch) => {
+      if (err) {
+        return done(err);
+      }
+
+      // if user's password does not match, return error
+      if (!isMatch) {
+        const error = new Error('Incorrect email or password');
+        error.name = 'IncorrectCredentialsError';
+
+        return done(error);
+      }
+
+      const payload = {
+        sub: user._id
+      };
+
+      // create a token string
+      //
+      // jwt.sign(payload, secretOrPrivateKey, [options, callback])
+      // - generates a JWT token, assign it to a user object, and then return that JWT token
+      // - payload: the user object
+      // - secretOrPrivateKey: can be anything used for encoding
+      const token = jwt.sign(payload, config.jwtSecret);
+      const data = {
+        name: user.email
+      };
+
+      return done(null, token, data);
+    });
+  });
+});
