@@ -1,8 +1,12 @@
 var express = require('express');
 var path = require('path');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var newsRouter = require('./routes/news');
+
+var config = require('./config/config.json');
+require('./models/main.js').connect(config.mongoDbUri);
 
 var app = express();
 
@@ -19,5 +23,8 @@ app.use('/news', newsRouter);
 app.use(function(req, res, next) {
   res.status(404);
 });
+
+// solving cross origin request issue for development
+app.use(cors());
 
 module.exports = app;

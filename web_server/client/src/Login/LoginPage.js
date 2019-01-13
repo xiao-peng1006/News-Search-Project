@@ -2,6 +2,7 @@ import './LoginPage.css';
 
 import LoginForm from './LoginForm';
 import React from 'react';
+import Auth from '../Auth/Auth';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -9,11 +10,7 @@ class LoginPage extends React.Component {
 
     // set the initial component state
     this.state = {
-      errors: {
-        summary: 'Summary Error!',
-        email: 'Email Error!',
-        password: 'Password Error!'
-      },
+      errors: {},
       user: {
         email: '',
         password: ''
@@ -32,7 +29,43 @@ class LoginPage extends React.Component {
     console.log('email: ', email);
     console.log('password: ', password);
 
-    //TODO: Post login data
+    // post login data
+    const url = 'http://' + window.location.hostname + ':3000' + '/auth/login';
+    const request = new Request(
+      url,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.user.email,
+          password: this.state.user.password
+        })
+      }
+    );
+
+    fetch(request).then(response => {
+      if (response.status === 200) {
+        this.setState({
+          errors: {}
+        });
+
+        response.json().then(json => {
+          console.log(json);
+          Auth.authenticateUser(json.token, email);
+          window.location.replace('/');
+        });
+      } else {
+        console.log('Login Failed');
+        response.json().then(json => {
+          const errors = json.errors ? json.errors : {};
+          errors.summary = json.message;
+          this.setState({errors});
+        });
+      }
+    });
   }
 
   changeUser(event) {

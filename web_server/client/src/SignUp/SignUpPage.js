@@ -35,7 +35,41 @@ class SignUpPage extends React.Component {
       return;
     }
 
-    //TODO: Post registeration data
+    // post registeration data
+    const url = 'http://' + window.location.hostname + ':3000' + '/auth/signup';
+    const request = new Request(
+      url,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Contetn-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.user.email,
+          password: this.state.user.password
+        })
+      }
+    );
+
+    fetch(request).then(response => {
+      if (response.status === 200) {
+        this.setState({
+          errors: {}
+        });
+
+        // change the current URL to /login
+        window.location.replace('/login');
+      } else {
+        response.json().then(json => {
+          console.log(json);
+          const errors = json.errors ? json.errors: {};
+          errors.summary = json.message;
+          console.log(this.state.errors);
+          this.setState({errors});
+        });
+      }
+    });
   }
 
   changeUser(event) {
